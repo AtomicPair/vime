@@ -43,7 +43,6 @@ local.properties
 
 # Build results
 [Dd]ebug/
-[Rr]elease/
 *_i.c
 *_p.c
 *.ilk
@@ -60,7 +59,6 @@ local.properties
 *.tlh
 *.tmp
 *.vspscc
-.builds
 *.dotCover
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
@@ -137,7 +135,6 @@ Desktop.ini
 *.egg
 *.egg-info
 dist
-build
 eggs
 parts
 bin
