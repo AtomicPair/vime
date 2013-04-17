@@ -1,0 +1,901 @@
+                             Vime Style Guide
+                             by Adam Parrott
+
+                         Updated on April 15, 2013
+
+Contents
+
+1. Introduction             *intro*
+
+Formatting
+
+2. Comments                 *comments*
+3. Lines                    *lines*
+4. Indentation              *indent*
+5. Spacing                  *spacing*
+
+Conventions
+
+6. Declarations             *declare*
+7. Headers                  *headers*
+8. Names                    *names*
+9. Structure                *structure*
+
+Miscellaneous
+
+10. Credits                 *credits*
+
+============================================================================
+1. Introduction                                                     *intro*
+
+1.1 General
+
+This document summarizes the formatting and style conventions for all code
+written in the Vime project.  The guidelines provided herein are intended
+to improve code readability while also making future updates consistent
+across multiple contributors and source code branches.
+
+Unless otherwise noted, the guidelines outlined in this document apply to
+all new code submitted to the Vime project.  Existing code that does not
+comply with any part of this standard may be updated at the discretion of
+then-current project maintainer(s) and/or contributors.  Compliance updates
+to existing code should be made using separate branches/patches in the
+current version control system.
+
+1.2 Principles
+
+In general, this project aims to follow these three simple principles:
+
+1. Clarity over obscurity.
+2. Readability matters.
+3. Consistency above all else.
+
+The various sections contained in this document attempt to expand upon
+these principles in a practical and direct way.  Please review this guide
+in it's entirety before modifying or writing any new code for the project.
+
+1.3 Disclaimer
+
+WARNING: ALL CODE SUBMISSIONS TO THIS PROJECT ARE SUBJECT TO THE GUIDELINES
+SET FORTH IN THIS DOCUMENT.  CODE WHICH FAILS TO COMPLY WITH THIS STANDARD
+WILL EITHER BE (A) REJECTED DUE TO NON-COMPLIANCE, OR, (B) AT THE DISCRETION
+OF THE PROJECT MAINTAINER(S), UPDATED AS NECESSARY AND WITHOUT PRIOR WARNING
+TO ENSURE COMPLIANCE WITH THE PREVAILING STANDARD.
+
+In short, let's work together to make this project better for everyone.  :-)
+
+============================================================================
+2. Comments                                                      *comments*
+
+2.1 General
+
+    All comments should be written in English.
+
+    Wherever possible, all comments should be complete sentences, starting
+    with a capital letter (unless the first word is a lower camelCase
+    identifier, in which case the sentence should begin with a lowercase
+    letter) and ending with a period.
+
+    Use comments sparingly throughout your code.  Remember, there is always
+    a maintenance cost associated with comments.  Always make sure your
+    comments and the code agree with each other!
+
+    Do not use comments to explain WHAT the code actually does, but to
+    explain WHY you chose the code you wrote.  Doing this will help aid
+    the comprehension of those people -- yourself included -- who may have
+    to update your code at some future date.
+
+2.2 Inline comments
+
+    Inline comments should only be used to describe a single code statement,
+    be positioned directly above the code statement, padded with one blank
+    line on either side of the comment area (one line above and one line
+    below), and contain no more than a few complete sentences:
+
+        ; This is an example of an inline comment.
+
+        CleanFruit( $apples, $oranges )
+
+        ; This is a really long comment which was made solely for the
+        ; purpose of illustrating this example.
+
+        CleanFruit( $apples, $oranges )
+
+    Don't include inline comments on the same line as the code.  This is
+    especially important with longer comments that may be required to
+    explain the "why" of a particular code statement.  If that code should
+    ever change, reformatting the same-line comment will require more work
+    than would an above-line comment:
+
+        ; This really long comment will be much easier to reformat in
+        ; the future, should the code below ever be updated or refactored.
+
+        CleanFruit( $apples, $oranges )
+
+    instead of this:
+
+        CleanFruit( $apples, $oranges ) ; This really long comment will require
+                                        ; more work to update, reindent, and
+                                        ; reformat, should the code statement
+                                        ; ever be updated in the future.
+
+2.3 Block comments
+
+    Block comments should only be used for related sections of code
+    that (a) do not directly describe a single code statement and/or
+    (b) require more than a few sentences to support your description.
+
+    Indent block comments to the same level as the code that follows,
+    leaving a blank line between the bottom of the comment block and the
+    first code statement being described:
+
+    #cs
+    # This is an example of a block comment.  We should add some additional
+    # text here to better explain what all the following code does for us.
+    # We will also insert another paragraph below this one to illustrate
+    # the proper formatting for a multi-paragraph block comment.
+    #
+    # Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit
+    # amet lorem ante, in vehicula augue. Proin commodo imperdiet erat in
+    # porttitor. Aenean sapien nibh, porta porttitor convallis id,
+    # tempor vitae nunc. Donec sit amet erat ut dolor bibendum pretium ac
+    # ac mi. Ut ut ante ac ipsum pretium aliquam at in purus.
+    #ce
+
+    ; ...insert lots of related code here...
+
+============================================================================
+3. Lines                                                            *lines*
+
+3.1 General
+
+    Except in rare occasions where it would reasonably impair
+    reader comprehension and/or code formatting, wrap all lines
+    at 96 characters.
+
+    Lines should contain no trailing whitespace at the end of the line.
+
+    Place one blank newline at the end of all source files.
+
+3.2 Blank lines
+
+    Blank lines should be used judiciously to improve code readability by
+    separating unrelated portions of code, such as statements, conditional
+    statements, functions, and other similar groupings.  In general, prefer
+    the weighted application of blank lines to group related code and
+    improve clarity over fewer lines of code and smaller source files:
+
+        Dim $AppleCount As String
+
+        $AppleCount = 2
+        CleanFruit( $AppleCount )
+
+        Func CleanFruit( $apples )
+            If ( $apples == 0 ) Then
+                InspectFruit( $apples )
+            End If
+
+            $apples = -1
+
+            Cleanup()
+        EndFunc
+
+        Func InspectFruit( $fruits )
+            If ( $fruits == 1 ) Then
+                CleanOne()
+            Else
+                CleanMany()
+            EndIf
+        EndFunc
+
+    instead of this:
+
+        Dim $AppleCount As String
+        $AppleCount = 2
+        CleanFruit( $AppleCount )
+        Func CleanFruit( $apples )
+            If ( $apples == 0 ) Then
+                InspectFruit( $apples )
+            End If
+            $apples = -1
+            Cleanup()
+        EndFunc
+        Func InspectFruit( $fruits )
+            If ( $fruits == 1 ) Then
+                CleanOne()
+            Else
+                CleanMany()
+            EndIf
+        EndFunc
+
+    Moreover, where possible, it is recommended that you group assignment
+    statements and function calls into their own separate logical blocks:
+
+        Func CleanFruit()
+            Global $Apples
+
+            ; Function call group
+
+            TraySetToolTip("Cleaning fruit...")
+            CleanMany( $Apples )
+            UpdateBasket()
+
+            ; Assignment statement group
+
+            $WashState = $VI_STATE_OFF
+        EndFunc
+
+    However, remember that, as with many things, moderation is the key!
+    Do not (over)use blank lines to separate every adjacent line of code
+    in your source files.  We can best achieve readability when we
+    responsibly and holistically combine ALL the formatting rules
+    together, be it indentation, whitespace, and/or line spacing:
+
+        Func CleanOne( $apples = 1 )
+            If ( $apples == 1 ) Then
+                CleanMany()
+            EndIf
+
+            Switch $apples
+                Case 1
+                    CleanMany()
+                Case Else
+                    Return
+            EndSwitch
+        EndFunc
+
+    instead of this:
+
+        Func CleanOne( $apples = 1 )
+
+            If ( $apples == 1 ) Then
+
+                CleanMany()
+
+            EndIf
+
+            Switch $apples
+
+                Case 1
+                    CleanMany()
+                Case Else
+                    Return
+
+            EndSwitch
+
+        EndFunc
+
+    In the above example, indentation rules help to visually separate the
+    function itself from the code contained therein, while blank line(s)
+    are used to separate the unrelated code groups within the function.
+
+3.3 Line breaks/wrapping
+
+3.3.1 General
+
+    Use an underscore (or the current language's default line continuation
+    character) to break related lines, as necessary.
+
+    Place all assignment and concatenation operators in multi-line
+    statements at the beginning of any new line continuations before any
+    other condtionals or code statements.  Doing this will enhance
+    readability while easing debugging operations on complex statements:
+
+        $fruitBasket = ( _
+            $fruitList[$FRUIT_ITEM_APPLE] _
+            & $fruitList[$FRUIT_ITEM_ORANGE] _
+            & $fruitList[$FRUIT_ITEM_BANANA] _
+            & $fruitList[$FRUIT_ITEM_BERRY] )
+
+    instead of this:
+
+        $fruitBasket = ( _
+            $fruitList[$FRUIT_ITEM_APPLE] & _
+            $fruitList[$FRUIT_ITEM_ORANGE] & _
+            $fruitList[$FRUIT_ITEM_BANANA] & _
+            $fruitList[$FRUIT_ITEM_BERRY] )
+
+    or this:
+
+        $fruitBasket = ( _
+            $fruitList[$FRUIT_ITEM_APPLE] & $fruitList[$FRUIT_ITEM_ORANGE] & _
+            $fruitList[$FRUIT_ITEM_BANANA] & $fruitList[$FRUIT_ITEM_BERRY] )
+
+3.3.2 If statements
+
+    If statements should always be written in the following block style,
+    with an opening If statement, optional Else clause, closing EndIf
+    statement, and any containing code separated on individual lines:
+
+        If ( $apples == 1 ) Then
+            CleanOne()
+        Else
+            CleanMany()
+        EndIf
+
+    You may use single-line If statements in the following style, provided
+    that the result executes only one simple statement and requires
+    no Else exception handling:
+
+        If ( $apples == 1 ) Then Return $okValue
+
+    Limit the number of test conditions in your If statements to no more
+    than two conditions per single line:
+
+        If ( $apples == 1 ) And ( $oranges == 2 ) Then
+            CleanOne()
+        EndIf
+
+    If you must test more than two conditions per If statement, break up
+    each test condition on a separate line (including the current language's
+    default line continuation character, if applicable), placing the
+    proceeding boolean operator before each new condition.  Conclude the
+    If statement with a Then clause on a separate line:
+
+        If ( $apples == 1 ) _
+           Or ( $oranges == 2 ) _
+           Or ( $bananas == 3 ) _
+           Or ( $berries == 4 ) _
+           Or ( $nuts == 5 ) _
+           Or ( $lemons == 6 ) _
+        Then
+            CleanOne()
+        EndIf
+
+    instead of this:
+
+        If ( $apples == 1 ) Or ( $oranges == 2 ) Or ( $bananas == 3 ) Or _
+           ( $berries == 4 ) Or ( $nuts == 5 ) Or ( $lemons == 6 ) Then
+            CleanOne()
+        EndIf
+
+3.3.3 Functions
+
+    Functions with multiple parameters spanning more than one line should be
+    written in the following style, with the opening function declaration
+    residing on the first line, followed by each new parameter and a comma
+    delimiter residing on a separate line.  (Where applicable, append the
+    current language's default line continuation character to each line):
+
+        Func CleanFruit( _
+            $apples, _
+            $oranges, _
+            $bananas, _
+            $berries, _
+            $nuts = 10, _
+            $lemons = 1, _
+            $dressing = true )
+
+    instead of this:
+
+        Func CleanFruit( $apples, $oranges, $bananas, $berries, _
+            $nuts = 10, $lemons = 1, $dressing = true )
+
+    While consuming more vertical space, writing code in this style
+    should enhance readability for long parameters lists while also
+    easing debugging operations across complex method signatures.
+
+3.3.4 Method/function calls
+
+    Similarly, method/function calls with multiple parameters spanning more
+    than one line wrap should mirror the same style for functions as listed
+    in section 3.3.3, with the variable declaration and function call
+    residing on the first line, followed by each parameter and a comma
+    delimiter residing on a separate line:
+
+        $basket = CleanFruit( _
+            "ten", _
+            "twenty", _
+            "thirty", _
+            "forty", _
+            "fifty", _
+            "one", _
+            true )
+
+    instead of this:
+
+        $basket = CleanFruit( "ten", "twenty", "thirty", "forty", _
+            "fifty", "one", true )
+
+============================================================================
+4. Indentation                                                     *indent*
+
+4.1 Tabs
+
+    Code should indented using four (4) spaces only -- no tab characters.
+
+4.2 Conditional statements
+
+4.2.1 If statements
+
+    Always align each If, Else, and EndIf statement in the same column.
+    Indent the code contained inside each If conditional test block
+    one level from the leading If/Else/EndIf statement:
+
+        If ( $apples == 1 ) Then
+            CleanOne()
+        ElseIf ( $apples == 2 ) Then
+            CleanMany()
+        Else
+            Quit()
+        EndIf
+
+    Multiple test conditions in the same If statement should be aligned
+    with the opening parenthesis of the first test condition following
+    the current If statement.  The concluding Then statement should be
+    aligned with the opening If statement in the same column:
+
+        If ( $apples == 1 ) _
+           Or ( $oranges == 2 ) _
+           Or ( $bananas == 3 ) _
+           Or ( $berries == 1 ) _
+           Or ( $nuts == 1 ) _
+           Or ( $lemons == 1 ) _
+        Then
+            CleanOne()
+        EndIf
+
+4.2.2 Select/Switch statements
+
+    Always align each Select/EndSelect and Switch/EndSwitch statement
+    in the same column.  Indent individual Case statements one level
+    from the opening Select/Switch statement.  Indent the code
+    contained inside each Case block two levels from the opening
+    Select/Switch statement:
+
+        Select
+            Case ( $apples > $oranges )
+                CleanOne()
+            Case ( $apples < $bananas )
+                CleanMany()
+            Case Else
+                Quit()
+        EndSelect
+
+        Switch $apples
+            Case 0 To 1
+                CleanOne()
+            Case 2 To 100
+                CleanMany()
+            Case Else
+                Quit()
+        EndSwitch
+
+4.3 Functions
+
+    The left edge of all functions should be flush with the left side of
+    the screen (i.e. column 1 or no indentation).  All code contained
+    inside a function should be indented at least one level from the
+    function declaration statement:
+
+        Func CleanFruit( $apples = 0 )
+            If ( $apples == 0 ) Then
+                Return False
+            Else
+                Return True
+            EndIf
+        EndFunc
+
+    Functions with multiple parameter lines should be indented one level
+    from the function's opening declaration line:
+
+        Func CleanFruit( _
+            $apples, _
+            $oranges, _
+            $bananas, _
+            $berries, _
+            $nuts = 10, _
+            $lemons = 1, _
+            $dressing = true )
+
+4.4 Method/function calls
+
+    Method/function calls with multiple parameters should be indented
+    one level from the statement's declaration line:
+
+        $basket = CleanFruit( _
+            $apples, _
+            $oranges, _
+            $bananas, _
+            $berries, _
+            $nuts = 10, _
+            $lemons = 1, _
+            $dressing = true )
+
+============================================================================
+5. Spacing                                                        *spacing*
+
+5.1 Operators
+
+    Always surround assignment and binary operators with a single space on
+    either side -- assignment (=), augmented assignment (+=, -=, etc.),
+    comparisons (==, <, >, <>, <=, >=), and booleans (And, Or, Not):
+
+        $i = $i + 1
+        $appleCount += 1
+        If ( $apples == 1 ) Then
+        Func CleanFruit( $apples = 1.0 )
+
+    instead of this:
+
+        $i=$i+1
+        $appleCount+=1
+        If ( $apples==1 ) Then
+        Func CleanFruit( $apples=1.0 )
+
+    Additionally, never use more than one space around an assignment
+    (or other) operator to align it with another:
+
+        $apples = 1
+        $oranges = 2
+        $frameNum = 3
+
+    instead of this:
+
+        $apples   = 1
+        $oranges  = 2
+        $frameNum = 3
+
+5.2 Separators
+
+    Always pad separating characters (such as commas, semicolons, or
+    colons) with a single space on the right (trailing) side of each
+    separator, but never on the left (opening) side of each character:
+
+        $fruitBasket( 1, 2 )
+        MsgBox( 0, "", "Test message" )
+        CleanFruit( "1", "2", "3" )
+
+    instead of this:
+
+        $fruitBasket( 1 , 2 )
+        MsgBox( 0 , "" , "Test message" )
+        CleanFruit( "1" , "2" , "3" )
+
+5.3 Parenthesized statements
+
+5.3.1 General
+
+    Always pad parenthesized statements with one space on each inner side.
+
+        $fruitBasket( 1, 1 )
+        If ( $apples == 4 )
+        CleanFruit( $apples, $oranges )
+        Func CleanFruit( $apples, $oranges )
+
+    instead of this:
+
+        $fruitBasket(1, 1)
+        If ($apples == 4)
+        CleanFruit($apples, $oranges)
+        Func CleanFruit($apples, $oranges)
+
+    In cases where you have multiple parenthesized statements nested inside
+    of each other, pad both sides inside each statement with one space:
+
+        $fruitBasket( $fruitIndex[ 1 ][ 2 ] )
+        $fruitBasket( $fruitIndex[ 1 ], $fruitType[ 2 ] )
+
+    instead of this:
+
+        $fruitBasket( $fruitIndex[1][2] )
+        $fruitBasket( $fruitIndex[1], $fruitType[2] )
+
+    Also, except where prohibited by the source language (i.e. with If
+    statements, etc.), never pad the outside parentheses or bracket
+    of an array, list, dictionary, method call, or similar object:
+
+        $fruitBasket( 1 ) = $fruitList[ 1 ]
+        CleanFruit( $apples, $oranges )
+        Func CleanFruit( $apples, $oranges )
+
+    instead of this:
+
+        $fruitBasket ( 1 ) = $fruitList [ 1 ]
+        CleanFruit ( $apples, $oranges )
+        Func CleanFruit ( $apples, $oranges )
+
+5.3.2 Conditional statements
+
+    Enclose all conditional check statements in padded parentheses, even
+    if parentheses are not required by the source language.
+
+        If ( $apples == 1 ) And ( $oranges == 2 ) Then
+
+    instead of this:
+
+        If $apples == 1 And $oranges == 2 Then
+
+============================================================================
+6. Declarations                                                   *declare*
+
+6.1 General
+
+    Declare all variable and constant declarations on individual lines:
+
+        Dim $apples As String
+        Dim $oranges As String
+        Dim $bananas As String
+
+    instead of this:
+
+        Dim $apples As String, $oranges As String, $bananas As String
+
+    or this:
+
+        Dim $apples As String, _
+            $oranges As String, _
+            $bananas As String
+
+6.3 Constants
+
+    Local and global constants that directly support a separate,
+    self-contained code module (such as the Keyboard or StatusBar modules)
+    should retain those constants in the related module file.
+
+    Place all other generic application constants in the VimeConstants.au3
+    file under the source root directory.  This file serves as a central
+    location for all global application constants.
+
+============================================================================
+7. Headers                                                        *headers*
+
+7.1 Modules
+
+    All new file modules should contain the following header template at
+    the top of the file, replacing all <ABC> placeholders below with the
+    appropriately indicated value (summary, authors, update date, etc.):
+
+        ;============================================================================
+        ; <Module Name>
+        ;
+        ; Summary:      <Module description>
+        ; Author(s):    <Author names>
+        ; Updated:      <Updated date in YYYY-MM-DD format>
+        ;============================================================================
+
+    Module headers should be padded with one blank line on each side of the
+    header (one directly above the header and one directly below):
+
+        ---------SOF--------
+
+        ;===================
+        ; Main module
+        ;===================
+
+        CleanFruit()
+        CheckOne()
+        Quit()
+
+        ---------EOF--------
+
+7.2 Functions
+
+    All new functions should contain the following header template above
+    the function declaration, replacing all <ABC> placeholders below with the
+    appropriately indicated value (summary, authors, update date, etc.):
+
+        ;===========================================================================
+        ; <Function Name>
+        ;
+        ; Summary:      <Function description>
+        ; Author(s):    <Author names>
+        ; Updated:      <Updated date in YYYY-MM-DD format>
+        ;===========================================================================
+
+    Function headers should be padded with one blank line on each side of the
+    header (one directly above the header and one directly below):
+
+        ; ...code here...
+
+        ;===================
+        ; CleanFruit()
+        ;===================
+
+        Func CleanFruit()
+            Return True
+        EndFunc
+
+============================================================================
+8. Names                                                            *names*
+
+8.1 General
+
+    Whenever possible, use descriptive and self-explanatory entity names.
+
+        Const $VI_WINDOW_CLASS_ID As Int
+        Dim $IsKeyPressed As Boolean
+        Func ChangeEditMode()
+
+    instead of this:
+
+        Const $VI_WND_CLS_ID As Int
+        Dim $kp As Boolean
+        Func ChgEdMode()
+
+8.2 Constants
+
+    Constants should start with the $VI_ prefix string, contain all capital
+    letters, and use underscores to separate individual words:
+
+        Const $VI_CONSTANT_ONE As Int = 1
+        Const $VI_CONSTANT_TWO AS Int = 2
+
+8.3 Global variables
+
+    Name all new global variables using upper CamelCase notation, where each
+    separate word in the variable name starts with a capital letter:
+
+        Global $NewGlobalVariable As String
+
+8.4 Local variables
+
+    Name all new local variables using lower camelCase notation, where the
+    first word in the variable name is all lower case and each subsequent
+    word starts with a capital letter:
+
+        Local $newLocalVariable As Int
+
+8.5 Functions
+
+    Name all new functions using upper CamelCase notation, where each
+    separate word in the variable name starts with a capital letter:
+
+        Func CleanFruit()
+
+    Name all new function parameters using lower camelCase notation, where
+    the first word in the variable name is all lower case and each
+    subsequent word starts with a capital letter:
+
+        Func CleanFruit( $apples, $oranges, $bananas )
+
+============================================================================
+9. Structure                                                    *structure*
+
+9.1 Conditional statements
+
+    Unless you find it unavoidable, do not use multiple If/ElseIf
+    statements to test multiple conditions.  Instead, prefer the use of
+    other constructs, such as Switch and Select case statements.
+
+        Switch $AppMode
+            Case $VI_APP_MODE_ON
+                App_Disable()
+            Case $VI_APP_MODE_OFF
+                App_Enable()
+        EndSwitch
+
+    instead of this:
+
+        If ( $AppMode == $VI_APP_MODE_ON ) Then
+            App_Disable()
+        ElseIf ( $AppMode == $VI_APP_MODE_OFF ) Then
+            App_Enable()
+        EndIf
+
+9.2 Functions
+
+9.2.1 Declarations
+
+    Place all global and local variable and constant declarations for a new
+    function (or similar structure) at the top of the function:
+
+    Func CleanFruit()
+        Global $Apples
+        Global $Oranges
+        Global $Bananas
+        Local $appleCount As Int
+        Local $wombatCount As Int
+        Local $bananaCount As Int
+
+        ; ...function code here...
+    EndFunc
+
+9.2.2 Multiple If blocks (or "Arrow Code")
+
+    Avoid the use of multiple nested If blocks in any function (or similar
+    structure).  Instead, replace these "arrow code" blocks with other
+    design concepts, such as guard clauses, code refactoring, et al:
+
+    Instead of this:
+
+        If ( SomeNecessaryCondition ) Then
+            If ( SomeOtherCondition ) Then
+                If ( SomeFinalCondition ) Then
+                    ; function body code
+                EndIf
+            EndIf
+        EndIf
+
+    do this:
+
+        If ( Not SomeNecessaryCondition ) Then Return @error
+        If ( Not SomeOtherCondition ) Then Return @error
+        If ( Not SomeFinalCondition ) Then Return @error
+
+        ; function body code
+
+    Remember, you should always place failure conditions at the top of the
+    function!  This improves readability and comprehension when maintaining
+    and updating existing codebases.
+
+    For more information on these concepts, see the following article:
+
+    http://codinghorror.com/blog/2006/01/flattening-arrow-code.html
+
+9.2.3 Return statements
+
+    Always opportunistically return as soon as possible from a function.
+
+    There is no need to constrain yourself to one exit point at the bottom
+    of a function.  It is better to write logically flowing code with
+    several identifiable exit points grouped in small blocks than it is to
+    write "arrow code" or complex loop structures to ensure that only one
+    Return statement is used in a given function.
+
+    Remember, code is poetry.  Prefer clean, readable code above all else.
+
+9.3 Modules
+
+    New modules should adhere to the following layout/flow:
+
+        <Module header>
+        <AutoIt3Wrapper directives> 
+        <AutoItSetOption() statements>
+        <#include statements>
+        <Global declarations>
+        <Local Const declarations>
+        <Function declarations>
+
+    for example:
+
+        ============================================================================
+        = Test Module
+        =
+        = Summary:      This is a test module.
+        = Author(s):    Adam Parrott
+        = Updated:      2012-04-14
+        ============================================================================
+
+        #AutoIt3Wrapper_Res_Comment=Here is a basic comment.
+        #AutoIt3Wrapper_Res_Description=Vim Everywhere
+        #AutoIt3Wrapper_Res_Fileversion=1.0.0.0
+
+        Opt("ExpandVarStrings", 1)
+        Opt("MustDeclareVars", 1)
+        Opt("TrayMenuMode", 1)
+
+        #include <Array.au3>
+        #include "include\VimeConstants.au3"
+        #include "include\VimeFunctions.au3"
+
+        Global $ActiveMapBuffer
+        Global $ActiveMapCount
+        Global $ActiveMapExtra
+
+        Const $VI_TEST_MAP_MODE = 0
+        Const $VI_TEST_MAP_KEY = 1
+        Const $VI_TEST_MAP_FUNC = 2
+
+        Func Main()
+            While 1
+                Sleep 10
+            WEnd
+        EndFunc
+
+============================================================================
+10. Credits                                                       *credits*
+
+Portions of this document were influenced by the following sources:
+
+    [1] Vim documentation
+    http://vimdoc.sourceforge.net/htmldoc/usr_toc.html
+
+    [2] Style Guide for Python Code (PEP 8)
+    http://www.python.org/dev/peps/pep-0008/
+
+    [3] Drupal coding standards
+    http://drupal.org/coding-standards
+
+For more information, refer to the project source code repository.
+
