@@ -71,5 +71,5 @@ For a list of all current and past contributors to the Vime project, see the [au
 [MailLink]: mailto:parrott.adam@gmail.com
 [ProjectLink]: http://github.com/Axianator/Vime/
 [RoadmapLink]: https://github.com/Axianator/Vime/blob/master/docs/ROADMAP.md
-[VimeLogo]: https://github.com/Axianator/Vime/blob/master/dev/logo-big.png
+[VimeLogo]: https://raw.github.com/Axianator/Vime/master/dev/logo-big.png
 
