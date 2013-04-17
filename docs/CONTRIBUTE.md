@@ -81,7 +81,7 @@
 
 Once you have completed these steps, the Vime team will review your request and issue appropriate feedback.
 
-[DeveloperLink]: https://raw.github.com/axianator/vime/master/docs/DEVELOPERS.md
+[DeveloperLink]: https://github.com/Axianator/Vime/blob/master/docs/DEVELOPERS.md
 [IssuesLink]: https://github.com/Axianator/Vime/issues
-[StyleGuideLink]: https://raw.github.com/axianator/vime/master/docs/STYLE-GUIDE.txt
+[StyleGuideLink]: https://github.com/Axianator/Vime/blob/master/docs/STYLE-GUIDE.txt
 

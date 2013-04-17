@@ -61,15 +61,15 @@ Vime is 100% free and open-source software.  You can read more about the project
 
 For a list of all current and past contributors to the Vime project, see the [authors list][AuthorsLink] in the [docs][DocsLink] folder.
 
-[AuthorsLink]: https://raw.github.com/axianator/vime/master/docs/AUTHORS.md
-[ContributeLink]: https://raw.github.com/axianator/vime/master/docs/CONTRIBUTE.md
-[DeveloperLink]: https://raw.github.com/axianator/vime/master/docs/DEVELOPERS.md
-[DocsLink]: https://github.com/Axianator/Vime/master/docs/
-[DownloadLink]: https://github.com/axianator/vime/archive/master.zip
+[AuthorsLink]: https://github.com/Axianator/Vime/blob/master/docs/AUTHORS.md
+[ContributeLink]: https://github.com/Axianator/Vime/blob/master/docs/CONTRIBUTE.md
+[DeveloperLink]: https://github.com/Axianator/Vime/blob/master/docs/DEVELOPERS.md
+[DocsLink]: https://github.com/Axianator/Vime/master/blob/docs/
+[DownloadLink]: https://github.com/Axianator/Vime/archive/master.zip
 [IssuesLink]: https://github.com/Axianator/Vime/issues
-[LicenseLink]: https://raw.github.com/axianator/vime/master/LICENSE.txt
+[LicenseLink]: https://github.com/Axianator/Vime/blob/master/LICENSE.txt
 [MailLink]: mailto:parrott.adam@gmail.com
-[ProjectLink]: http://github.com/axianator/vime/
-[RoadmapLink]: https://raw.github.com/axianator/vime/master/docs/ROADMAP.md
-[VimeLogo]: https://raw.github.com/axianator/vime/master/dev/logo-big.png
+[ProjectLink]: http://github.com/Axianator/Vime/
+[RoadmapLink]: https://github.com/Axianator/Vime/blob/master/docs/ROADMAP.md
+[VimeLogo]: https://github.com/Axianator/Vime/blob/master/dev/logo-big.png
 

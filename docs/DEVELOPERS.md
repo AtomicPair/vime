@@ -135,9 +135,9 @@ Upon completion, the generated files will be stored in the `release` folder.
 [DownloadLink]: http://www.autoitscript.com/site/autoit/downloads/
 [IssuesLink]: https://github.com/Axianator/Vime/issues
 [SciteLink]: http://www.autoitscript.com/site/autoit-script-editor/
-[SourceDefaultKeysLink]: https://raw.github.com/axianator/vime/master/source/include/DefaultKeys.ini
-[SourceActionsLink]: https://raw.github.com/axianator/vime/master/source/include/VimeActions.au3
-[SourceKeyCodesLink]: https://raw.github.com/axianator/vime/master/source/include/KeyConstants.au3
-[SourceVimeLink]: https://raw.github.com/axianator/vime/master/source/Vime.au3
-[StyleGuideLink]: https://raw.github.com/axianator/vime/master/docs/STYLE-GUIDE.txt
+[SourceDefaultKeysLink]: https://github.com/Axianator/Vime/blob/master/source/include/DefaultKeys.ini
+[SourceActionsLink]: https://github.com/Axianator/Vime/blob/master/source/include/VimeActions.au3
+[SourceKeyCodesLink]: https://github.com/Axianator/Vime/blob/master/source/include/KeyConstants.au3
+[SourceVimeLink]: https://github.com/Axianator/Vime/blob/master/source/Vime.au3
+[StyleGuideLink]: https://github.com/Axianator/Vime/blob/master/docs/STYLE-GUIDE.txt
 
