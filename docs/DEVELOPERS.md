@@ -92,6 +92,7 @@ Func CursorLineEnd()
     SendKeyString( EncodeKey( "[End]" ) )
 EndFunc
 ```
+
 1. Functions may use any one of the built-in functions from the AutoIt standard library.  **Carefully consider (twice!) the use of any AutoIt UDF functions**, as these libraries will increase developer compile times and, more importantly, end-user memory bloat.
 
 2. In addition to the standard AutoIt functions, there are also several Vime custom support functions included in the second block near the end of the [`VimeActions.au3`][SourceActionsLink] file.  (These functions have an underscore prefix in the function name, i.e. `_GotoLine()`.) Where possible, use these support functions to augment your own key action functions.  If you require specific functionality that does not already exist in the AutoIt standard library or Vime project, feel free to code your own support function and add it to the code block at the end of the [`VimeActions.au3`][SourceActionsLink] file.
@@ -103,6 +104,15 @@ EndFunc
 5. **Keep your functions and small and light as possible.**  This will reduce execution times for the end-user and source code bloat for other developers.
 
 6. **All functions should be listed alphabetically** in the source code file, sorted ascending from A to Z.  Make sure you follow the coding conventions outlined in the [Vime Style Guide][StyleGuideLink] when crafting your new function(s).
+
+7. If you want to **add your new action function to the list of repeatable commands** in Command mode, make sure you register the current active function parameters with the _RegisterLastCommand() function.  Action functions that do not register themselves with the _RegisterLastCommand() function will not be repeatable by the user.
+
+```
+Func UndoChange()
+    SendKeyString( EncodeKey( "[Ctrl]z" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+EndFunc
+```
 
 ## Testing the Solution
 

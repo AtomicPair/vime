@@ -4,7 +4,7 @@
 ; Summary:      Contains all publicly available support functions which may
 ;               be called by a user for a given keypress.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-17
+; Updated:      2012-04-27
 ;============================================================================
 
 #include-once
@@ -236,7 +236,7 @@ EndFunc
 ; Summary:      Deletes the specified number of characters from the
 ;               current cursor position.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-12
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func DeleteCursor()
@@ -247,6 +247,8 @@ Func DeleteCursor()
     For $i = 1 To $ActiveMapCount
         SendKeyString( EncodeKey( "[Delete]" ) )
     Next
+
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
 EndFunc
 
 ;===========================================================================
@@ -255,32 +257,31 @@ EndFunc
 ; Summary:      Deletes the specified number of lines from the current
 ;               cursor position.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-12
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func DeleteLine()
     If ( $ActiveMapCount = 0 ) Then $ActiveMapCount = 1
 
-    Local $deleteKeys
     Local $i
     Local $lineNum = _GUICtrlEdit_LineFromChar( $ActiveControl, -1 )
     Local $startPos = _GUICtrlEdit_LineIndex( $ActiveControl, $lineNum )
     Local $endPos = _GUICtrlEdit_LineIndex( $ActiveControl, $lineNum + $ActiveMapCount ) - 1
 
-    If ( StringInStr( $ActiveControlType, "Edit" ) ) Then
-        _GUICtrlEdit_SetSel( $ActiveControl, $startPos, $endPos )
-        SendKeyString( EncodeKey( "[Delete][Delete]" ) )
-    Else
-        SendKeyString( EncodeKey( "[Home]" ) )
+    If ( $startPos == -1 Or $endPos == -1 ) Then
+        SendKeyString( EncodeKey( "[End][Home][Home]" ) )
 
         For $i = 1 To $ActiveMapCount
-            $deleteKeys &= "[Down]"
+            SendKeyString( EncodeKey ( "[Shift][Down]" ) )
         Next
 
-        $deleteKeys = "[Shift]" & $deleteKeys & "[Delete]"
-
-        SendKeyString( EncodeKey( $deleteKeys ) )
+        SendKeyString( EncodeKey( "[Delete]" ) )
+    Else
+        _GUICtrlEdit_SetSel( $ActiveControl, $startPos, $endPos )
+        SendKeyString( EncodeKey( "[Delete][Delete]" ) )
     EndIf
+
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
 EndFunc
 
 ;===========================================================================
@@ -358,7 +359,7 @@ EndFunc
 ; Summary:      Inserts the specified number of lines above the current
 ;               cursor position.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-12
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func InsertLineAbove()
@@ -371,6 +372,7 @@ Func InsertLineAbove()
     Next
 
     ChangeEditMode( $VI_MODE_INSERT )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
 EndFunc
 
 ;===========================================================================
@@ -379,7 +381,7 @@ EndFunc
 ; Summary:      Inserts the specified number of lines below the current
 ;               cursor position.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-14
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func InsertLineBelow()
@@ -392,6 +394,7 @@ Func InsertLineBelow()
     Next
 
     ChangeEditMode( $VI_MODE_INSERT )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
 EndFunc
 
 ;===========================================================================
@@ -442,7 +445,7 @@ EndFunc
 ;
 ; Summary:      Pastes the global put buffer text after the cursor.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-12
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func PutAfterCursor()
@@ -463,6 +466,33 @@ Func PutAfterCursor()
             _GUICtrlEdit_SetSel( $ActiveControl, $curPos[ 1 ], $curPos [ 1 ] )
             _GUICtrlEdit_ReplaceSel( $ActiveControl, $putText )
         EndIf
+    EndIf
+
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+EndFunc
+
+;===========================================================================
+; RepeatLastCommand()
+;
+; Summary:      Repeats the last user command (and count, if given).
+; Author(s):    Adam Parrott
+; Updated:      2012-04-27
+;===========================================================================
+
+Func RepeatLastCommand()
+    Local $i
+
+    $ActiveFunction = $LastCommand
+    $ActiveMapCount = $LastCommandCount
+    $LastCommand = ""
+    $LastCommandCount = ""
+
+    Call( $ActiveFunction )
+
+    If ( @error = 0xDEAD And @extended = 0xBEEF ) Then
+        ; Log negative function match
+    Else
+        ; Log positive function match
     EndIf
 EndFunc
 
@@ -507,11 +537,12 @@ EndFunc
 ;
 ; Summary:      Undoes the last Vime action.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-12
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func UndoChange()
     SendKeyString( EncodeKey( "[Ctrl]z" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
 EndFunc
 
 ;===========================================================================
@@ -593,3 +624,16 @@ Func _GotoLine( $controlId, $lineNum )
     EndIf
 EndFunc
 
+;===========================================================================
+; _RegisterLastCommand()
+;
+; Summary:      Registers the given function in the last command buffer.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-27
+;===========================================================================
+
+Func _RegisterLastCommand( $functionName, $functionCount, $functionExtra = "" )
+    $LastCommand = $functionName
+    $LastCommandCount = $functionCount
+    $LastCommandExtra = $functionExtra
+EndFunc

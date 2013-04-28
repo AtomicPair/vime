@@ -3,14 +3,14 @@
 ;
 ; Summary:      Contains primary Vime application functionality.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-17
+; Updated:      2012-04-27
 ;============================================================================
 
 #AutoIt3Wrapper_Icon=resources\logo-small.ico
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_Res_Comment=Emulates basic Vim editor functionality in any Windows-based application.
 #AutoIt3Wrapper_Res_Description=Vim Everywhere
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.0
+#AutoIt3Wrapper_Res_Fileversion=0.1.2.0
 #AutoIt3Wrapper_Res_requestedExecutionLevel=asInvoker
 #AutoIt3Wrapper_Outfile=..\release\Vime.exe
 
@@ -56,6 +56,9 @@ Global $InsertEscapeCheck
 Global $InsertEscapeCount
 Global $KeyExtended
 Global $KeyMappings[ 1 ][ 3 ]
+Global $LastCommand
+Global $LastCommandCount
+Global $LastCommandExtra
 Global $PrevHeight
 Global $PrevLeft
 Global $PrevTop
@@ -65,25 +68,23 @@ Global $StatusBar
 
 Main()
 
+; Main aplication loop functions
+
 ;===========================================================================
 ; ConfigureDefaults()
 ;
 ; Summary:      Configures application defaults.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-17
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func ConfigureDefaults()
-    TraySetIcon( $VI_FILE_APP_ICON )
-
-    $ActiveWindow = WinActive( "" )
-    $ActiveControl = ControlGetHandle( $ActiveWindow, "", ControlGetFocus( $ActiveWindow) )
-    $ActiveControlType = _WinAPI_GetClassName( $ActiveControl )
-    $ActivePos = WinGetPos( $ActiveWindow )
     $AppToggleKeys = $VI_APP_TOGGLE_KEYS
     $DesktopBottom = @DesktopHeight - TaskBar_Height()
     $KeyMappings = ReadDefaultKeys()
 
+    TraySetIcon( $VI_FILE_APP_ICON )
+    UpdateMetrics()
     App_Disable()
 EndFunc
 
@@ -92,7 +93,7 @@ EndFunc
 ;
 ; Summary:      Default application lifecycle function.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-12
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func Main()
@@ -102,11 +103,14 @@ Func Main()
         If App_IsActive() Then
             CheckInput()
             UpdateMetrics()
+            UpdateStatusBar()
         EndIf
 
         Sleep( $VI_DELAY_MAIN_LOOP )
     WEnd
 EndFunc
+
+; Application object functions
 
 ;===========================================================================
 ; App_Disable()
@@ -129,9 +133,9 @@ EndFunc
 ;===========================================================================
 ; App_Enable()
 ;
-; Summary:      Disables application functionality.
+; Summary:      Enables application functionality.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-17
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func App_Enable()
@@ -139,6 +143,8 @@ Func App_Enable()
     Local $controlTop
     Local $controlWidth
     Local $statusObj
+
+    UpdateMetrics()
 
     If IsArray( $ActivePos ) Then
         $controlLeft = $ActivePos[ 0 ]
@@ -151,7 +157,7 @@ Func App_Enable()
         EndIf
     EndIf
 
-    ChangeEditMode()
+    ChangeEditMode( $VI_MODE_NORMAL )
     EnableKeys()
     HotKeySet( $AppToggleKeys )
     TraySetToolTip( "Vime | Enabled" )
@@ -203,6 +209,8 @@ Func App_Toggle()
             App_Enable()
     EndSwitch
 EndFunc
+
+; Editor mode functions
 
 ;===========================================================================
 ; ChangeEditMode()
@@ -475,22 +483,6 @@ Func InsertEscape_Check()
 EndFunc
 
 ;===========================================================================
-; FlushBuffers()
-;
-; Summary:      Flushes all global keyboard buffers.
-; Author(s):    Adam Parrott
-; Updated:      2012-04-15
-;===========================================================================
-
-Func FlushBuffers()
-    $ActiveBuffer = ""
-    $KeyDownBuffer = ""
-    $KeyShiftBuffer = ""
-    $RawBuffer = ""
-    $UserBuffer = ""
-EndFunc
-
-;===========================================================================
 ; InsertEscape_Reset()
 ;
 ; Summary:      Resets the global Insert mode Escape keybuffer.
@@ -508,6 +500,24 @@ Func InsertEscape_Reset( $countNum = 0 )
     EndIf
 
     $InsertEscapeBuffer = ""
+EndFunc
+
+; Miscellaneous support functions
+
+;===========================================================================
+; FlushBuffers()
+;
+; Summary:      Flushes all global keyboard buffers.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-15
+;===========================================================================
+
+Func FlushBuffers()
+    $ActiveBuffer = ""
+    $KeyDownBuffer = ""
+    $KeyShiftBuffer = ""
+    $RawBuffer = ""
+    $UserBuffer = ""
 EndFunc
 
 ;===========================================================================
@@ -574,15 +584,14 @@ EndFunc
 ;===========================================================================
 ; UpdateMetrics()
 ;
-; Summary:      Updates global application metrics, including active window
-;               data and Vime status bar position.
+; Summary:      Updates global application metrics.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-15
+; Updated:      2012-04-27
 ;===========================================================================
 
 Func UpdateMetrics()
-    $ActiveWindow = WinActive( "" )
-    $ActiveControl = ControlGetHandle( $ActiveWindow, "", ControlGetFocus($ActiveWindow) )
+    $ActiveWindow = WinActive( "[ACTIVE]", "" )
+    $ActiveControl = ControlGetHandle( $ActiveWindow, "", ControlGetFocus( $ActiveWindow ) )
     $ActiveControlType = _WinAPI_GetClassName( $ActiveControl )
     $ActivePos = WinGetPos( $ActiveWindow )
 
@@ -593,7 +602,17 @@ Func UpdateMetrics()
         $ActiveWidth = $ActivePos[ 2 ]
         $DesktopBottom = @DesktopHeight - TaskBar_Height()
     EndIf
+EndFunc
 
+;===========================================================================
+; UpdateStatusBar()
+;
+; Summary:      Updates Vime status bar metrics.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-27
+;===========================================================================
+
+Func UpdateStatusBar()
     If ( $StatusBar <> 0 ) Then
         If ( $ActiveWindow <> $StatusBar[ $STATUS_BAR ] ) Then
 
@@ -623,4 +642,3 @@ Func UpdateMetrics()
 
     StatusBar_Text( $StatusBar, $VI_BAR_TEXT_MASK )
 EndFunc
-
