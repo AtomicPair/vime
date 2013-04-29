@@ -3,14 +3,14 @@
 ;
 ; Summary:      Contains primary Vime application functionality.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-27
+; Updated:      2012-04-28
 ;============================================================================
 
 #AutoIt3Wrapper_Icon=resources\logo-small.ico
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_Res_Comment=Emulates basic Vim editor functionality in any Windows-based application.
 #AutoIt3Wrapper_Res_Description=Vim Everywhere
-#AutoIt3Wrapper_Res_Fileversion=0.1.2.0
+#AutoIt3Wrapper_Res_Fileversion=0.1.3.0
 #AutoIt3Wrapper_Res_requestedExecutionLevel=asInvoker
 #AutoIt3Wrapper_Outfile=..\release\Vime.exe
 

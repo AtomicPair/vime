@@ -4,7 +4,7 @@
 ; Summary:      Contains all publicly available support functions which may
 ;               be called by a user for a given keypress.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-27
+; Updated:      2012-04-28
 ;============================================================================
 
 #include-once
@@ -15,6 +15,8 @@
 #include <ScrollBarConstants.au3>
 #include <WinAPI.au3>
 #include <WindowsConstants.au3>
+
+Local Const $VI_SELECTION_DELAY = 10
 
 ; Standard Vime key functions
 
@@ -248,7 +250,7 @@ Func DeleteCursor()
         SendKeyString( EncodeKey( "[Delete]" ) )
     Next
 
-    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ;===========================================================================
@@ -257,7 +259,7 @@ EndFunc
 ; Summary:      Deletes the specified number of lines from the current
 ;               cursor position.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-27
+; Updated:      2012-04-28
 ;===========================================================================
 
 Func DeleteLine()
@@ -274,14 +276,12 @@ Func DeleteLine()
         For $i = 1 To $ActiveMapCount
             SendKeyString( EncodeKey ( "[Shift][Down]" ) )
         Next
-
-        SendKeyString( EncodeKey( "[Delete]" ) )
     Else
         _GUICtrlEdit_SetSel( $ActiveControl, $startPos, $endPos )
-        SendKeyString( EncodeKey( "[Delete][Delete]" ) )
     EndIf
 
-    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+    SendKeyString( EncodeKey( "[Backspace][Home][Home]" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ;===========================================================================
@@ -372,7 +372,7 @@ Func InsertLineAbove()
     Next
 
     ChangeEditMode( $VI_MODE_INSERT )
-    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ;===========================================================================
@@ -394,7 +394,7 @@ Func InsertLineBelow()
     Next
 
     ChangeEditMode( $VI_MODE_INSERT )
-    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ;===========================================================================
@@ -468,7 +468,7 @@ Func PutAfterCursor()
         EndIf
     EndIf
 
-    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ;===========================================================================
@@ -542,7 +542,94 @@ EndFunc
 
 Func UndoChange()
     SendKeyString( EncodeKey( "[Ctrl]z" ) )
-    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
+EndFunc
+
+;===========================================================================
+; YankDown()
+;
+; Summary:      Copies both the current and next lines to the put buffer.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-28
+;===========================================================================
+
+Func YankDown()
+    SendKeyString( EncodeKey( "[Home][Home][Shift][Down][Shift][Down]" ) )
+    Sleep( $VI_SELECTION_DELAY )
+
+    $ActiveRegister = _GetSelection()
+
+    SendKeyString( EncodeKey( "[Up][Up]" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
+EndFunc
+
+;===========================================================================
+; YankLeft()
+;
+; Summary:      Copies the character(s) to the left of the cursor to the
+;               global put buffer.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-28
+;===========================================================================
+
+Func YankLeft()
+    SendKeyString( EncodeKey( "[Shift][Left]" ) )
+    Sleep( $VI_SELECTION_DELAY )
+
+    $ActiveRegister = _GetSelection()
+
+    SendKeyString( EncodeKey( "[Right]" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
+EndFunc
+
+;===========================================================================
+; YankLines()
+;
+; Summary:      Copies the current line (and the requested number of lines
+;               below the current line) to the global put buffer.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-28
+;===========================================================================
+
+Func YankLines()
+    Local $i
+
+    If ( $ActiveMapCount = 0 ) Then $ActiveMapCount = 1
+
+    SendKeyString( EncodeKey( "[Home][Home]" ) )
+
+    For $i = 1 To $ActiveMapCount
+        SendKeyString( EncodeKey( "[Shift][End][Shift][Right]" ) )
+    Next
+
+    Sleep( $VI_SELECTION_DELAY ) 
+
+    $ActiveRegister = _GetSelection()
+
+    For $i = 1 To $ActiveMapCount
+        SendKeyString( EncodeKey( "[Up]" ) )
+    Next
+
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
+EndFunc
+
+;===========================================================================
+; YankRight()
+;
+; Summary:      Copies the character(s) to the right of the cursor to the
+;               global put buffer.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-28
+;===========================================================================
+
+Func YankRight()
+    SendKeyString( EncodeKey( "[Shift][Right]" ) )
+    Sleep( $VI_SELECTION_DELAY )
+
+    $ActiveRegister = _GetSelection()
+
+    SendKeyString( EncodeKey( "[Left]" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ;===========================================================================
@@ -555,6 +642,24 @@ EndFunc
 
 Func YankSelection()
     $ActiveRegister = _GetSelection()
+EndFunc
+
+;===========================================================================
+; YankUp()
+;
+; Summary:      Copies both the previous and current lines to the put buffer.
+; Author(s):    Adam Parrott
+; Updated:      2012-04-28
+;===========================================================================
+
+Func YankUp()
+    SendKeyString( EncodeKey( "[Home][Home][Down][Shift][Up][Shift][Up]" ) )
+    Sleep( $VI_SELECTION_DELAY )
+
+    $ActiveRegister = _GetSelection()
+
+    SendKeyString( EncodeKey( "[Down][Down]" ) )
+    _RegisterLastCommand( $ActiveFunction, $ActiveMapCount, $ActiveMapExtra )
 EndFunc
 
 ; Vime action support functions

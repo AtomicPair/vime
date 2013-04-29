@@ -27,9 +27,9 @@ Global Const $VI_MATCH_FULL = 2
 Global Const $VI_MODE_NORMAL = 1
 Global Const $VI_MODE_NORMAL_DESC = "NORMAL"
 Global Const $VI_MODE_NORMAL_PATTERN = _
-    "([1-9]+\d{0,3})?" & _  ; Repeat count
-    "(\""[a-z])?" & _       ; Buffer assignment
-    "(.*)"                  ; Command string
+    "([1-9]+\d{0,3})?" & _  ; Repeat count      [1-9999]
+    "(\""[a-z])?" & _       ; Buffer assignment [Any one character]
+    "(.*)"                  ; Command string    [Any characters]
 
 ; Vime insert mode values
 

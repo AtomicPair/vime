@@ -3,7 +3,7 @@
 ;
 ; Summary:      Contains all keyboard capturing and processing functionality.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-15
+; Updated:      2012-04-28
 ;============================================================================
 
 #include-once
@@ -233,7 +233,7 @@ EndFunc
 ;
 ; Summary:      Encodes raw key value data into a standard format.
 ; Author(s):    Adam Parrott
-; Updated:      2012-04-15
+; Updated:      2012-04-28
 ;===========================================================================
 
 Func EncodeKey( $keyString )
@@ -285,7 +285,6 @@ Func EncodeKey( $keyString )
 
             If ( UBound( $keyCodes ) = 0 ) Then Return ""
 
-            $innerCodes = ""
             $leftCodes = ""
             $rightCodes = ""
 
@@ -295,11 +294,11 @@ Func EncodeKey( $keyString )
                 For $j = 0 To UBound( $KeyData, 1 ) - 1
                     Select
                         Case ( $keyCodes[ $i ] == $KeyData[ $j ][ $KEY_DATA_DESC ] )
-                            If ( $KeyData[ $j ][ $KEY_DATA_MOD ] ) Then
+                            If ( $keyData[ $j ][ $KEY_DATA_MOD ] ) Then
                                 $leftCodes = $KEY_STATE_DOWN & $j
                                 $rightCodes = $KEY_STATE_UP & $j
                             Else
-                                $innerCodes = _
+                                $returnCodes &= _
                                     $leftCodes _
                                     & $KEY_STATE_DOWN _
                                     & $j _
@@ -311,29 +310,8 @@ Func EncodeKey( $keyString )
                             EndIf
 
                             ExitLoop
-                        Case ( $keyCodes[ $i ] == $KeyData[ $j ][ $KEY_DATA_SHIFT ] )
-                            If ( $KeyData[ $j ][ $KEY_DATA_MOD ] ) Then
-                                $leftCodes = $KEY_STATE_DOWN & $j
-                                $rightCodes = $KEY_STATE_UP & $j
-                            Else
-                                $innerCodes = _
-                                    "$KEY_STATE_DOWN$16" _
-                                    & $leftCodes _
-                                    & $KEY_STATE_DOWN _
-                                    & $j _
-                                    & $KEY_STATE_UP _
-                                    & $j _
-                                    & $rightCodes _
-                                    & "$KEY_STATE_UP$16"
-                                $leftCodes = ""
-                                $rightCodes = ""
-                            EndIf
-
-                            ExitLoop
                     EndSelect
                Next
-
-               $returnCodes &= $innerCodes
             Next
 
             Return $returnCodes
